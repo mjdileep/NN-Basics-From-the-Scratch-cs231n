@@ -124,11 +124,6 @@ class TwoLayerNet(object):
         np.sum(self.params['W2']**2))
         dx2, dw2, grads["b2"] = affine_backward(dx, out_cache)
         dx1, dw1, grads["b1"] = affine_relu_backward(dx2, hidden_cache)
-        #rint("L_w1:",np.sum(self.params["W1"]**2))
-        #print("L_w2:",np.sum(self.params["W2"]**2))
-        #print("dx",dx.shape, dx[0,:])
-        #print("dw1",dw1.shape,dw1[0,:])
-        #print("dw2",dw2.shape,dw2[0,:])
         grads["W2"] = dw2 + self.reg*self.params['W2']
         grads["W1"] = dw1 + self.reg*self.params['W1']
 
