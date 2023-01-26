@@ -29,6 +29,7 @@ class TwoLayerNet(object):
         num_classes=10,
         weight_scale=1e-3,
         reg=0.0,
+        dropouts = 0.8
     ):
         """
         Initialize a new network.
@@ -43,6 +44,7 @@ class TwoLayerNet(object):
         """
         
         self.reg = reg
+        self.dropouts = dropouts
 
 
         ############################################################################
@@ -94,8 +96,12 @@ class TwoLayerNet(object):
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #print("input:",X[0,:])
+        dropout_param = {}
+        dropout_param["mode"] = "test" if y is None else "train"
+        dropout_param["p"] = self.dropouts
         hidden, hidden_cache = affine_relu_forward(X, self.params["W1"], self.params['b1'])
-        scores, out_cache = affine_forward(hidden, self.params["W2"], self.params['b2'])
+        dropped, dropped_cache = dropout_forward(hidden, dropout_param)
+        scores, out_cache = affine_forward(dropped, self.params["W2"], self.params['b2'])
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
@@ -123,7 +129,8 @@ class TwoLayerNet(object):
         loss += self.reg*0.5*(np.sum(self.params['W1']**2) + 
         np.sum(self.params['W2']**2))
         dx2, dw2, grads["b2"] = affine_backward(dx, out_cache)
-        dx1, dw1, grads["b1"] = affine_relu_backward(dx2, hidden_cache)
+        d_dropped = dropout_backward(dx2, dropped_cache)
+        dx1, dw1, grads["b1"] = affine_relu_backward(d_dropped, hidden_cache)
         grads["W2"] = dw2 + self.reg*self.params['W2']
         grads["W1"] = dw1 + self.reg*self.params['W1']
 
