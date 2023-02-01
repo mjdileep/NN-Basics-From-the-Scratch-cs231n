@@ -1,1 +1,1 @@
-# assignment1
+# CS231n - assignment1
