@@ -84,7 +84,6 @@ class LinearClassifier(object):
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             self.W -= grad*learning_rate
-
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             if verbose and it % 100 == 0:
